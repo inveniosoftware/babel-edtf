@@ -8,24 +8,40 @@
  Babel-EDTF
 ============
 
-.. image:: https://img.shields.io/travis/inveniosoftware/babel-edtf.svg
-        :target: https://travis-ci.org/inveniosoftware/babel-edtf
+A Python module for localization of Extended Date Time Format (EDTF) level 0
+strings.
 
-.. image:: https://img.shields.io/coveralls/inveniosoftware/babel-edtf.svg
-        :target: https://coveralls.io/r/inveniosoftware/babel-edtf
+EDTF is a syntax for specifying imprecise dates. See
+http://www.loc.gov/standards/datetime/. This modules relies on
+`python-edtf <https://pypi.org/project/edtf/>`_ for
+EDTF parsing.
 
-.. image:: https://img.shields.io/github/tag/inveniosoftware/babel-edtf.svg
-        :target: https://github.com/inveniosoftware/babel-edtf/releases
+Install
+-------
 
-.. image:: https://img.shields.io/pypi/dm/babel-edtf.svg
-        :target: https://pypi.python.org/pypi/babel-edtf
+Babel-EDTF is on PyPI so all you need is:
 
-.. image:: https://img.shields.io/github/license/inveniosoftware/babel-edtf.svg
-        :target: https://github.com/inveniosoftware/babel-edtf/blob/master/LICENSE
+.. code-block:: console
 
-Localization of Extended Date Time Format level 0 strings.
+   $ pip install babel-edtf
 
-TODO: Please provide feature overview of module
+Quickstart
+----------
+Let's format some EDTF strings:
 
-Further documentation is available on
-https://babel-edtf.readthedocs.io/
+>>> from babel_edtf import format_edtf
+>>> format_edtf('2020-01', locale='en')
+'Jan 2020'
+
+>>> format_edtf('2020-01/2020-09', locale='da')
+'jan.–sep. 2020'
+
+>>> format_edtf('2020-01/2020-09', format='long', locale='en')
+'January – September 2020'
+
+The following formats are supported:
+
+- ``short``
+- ``medium``
+- ``long``
+- ``full``

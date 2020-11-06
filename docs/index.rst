@@ -7,28 +7,15 @@
 
 .. include:: ../README.rst
 
-User's Guide
-------------
+Reference
+---------
 
-This part of the documentation will show you how to get started in using
-Babel-EDTF.
+.. autofunction:: babel_edtf.format_edtf
 
-.. toctree::
-   :maxdepth: 2
+.. autofunction:: babel_edtf.edtf_to_datetime
 
-   installation
-   usage
+.. autofunction:: babel_edtf.parse_edtf_level0
 
-API Reference
--------------
-
-If you are looking for information on a specific function, class or method,
-this part of the documentation is for you.
-
-.. toctree::
-   :maxdepth: 2
-
-   api
 
 Additional Notes
 ----------------

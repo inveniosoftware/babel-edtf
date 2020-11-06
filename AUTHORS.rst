@@ -9,4 +9,4 @@ Authors
 
 Localization of Extended Date Time Format level 0 strings.
 
-- CERN <info@inveniosoftware.org>
+- Lars Holm Nielsen <lars.holm.nielsen@cern.ch>
