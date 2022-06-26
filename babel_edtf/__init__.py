@@ -15,7 +15,6 @@ from edtf import PRECISION_DAY, PRECISION_MONTH, PRECISION_YEAR, Date, \
     EDTFObject, Interval, parse_edtf, struct_time_to_datetime
 from edtf.parser.grammar import ParseException
 
-from .version import __version__
 
 BOUND_LOWER = 'lower'
 BOUND_UPPER = 'upper'
@@ -169,3 +168,6 @@ def _format_edtf0_interval_naive(edtf_interval, format, locale):
 
     return format_interval(
         dt_start, dt_end, skeleton, fuzzy=True, locale=locale)
+
+
+__version__ = '1.0.0'
