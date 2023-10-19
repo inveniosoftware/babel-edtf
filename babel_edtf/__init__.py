@@ -11,8 +11,9 @@ from datetime import date as date_
 
 from babel import Locale
 from babel.dates import LC_TIME, format_date, format_interval, format_skeleton
+from dateutil.parser import isoparse
 from edtf import PRECISION_DAY, PRECISION_MONTH, PRECISION_YEAR, Date, \
-    EDTFObject, Interval, parse_edtf, struct_time_to_datetime
+    EDTFObject, Interval, struct_time_to_datetime, parse_edtf as edtf_parse_edtf
 from edtf.parser.grammar import ParseException
 
 from .version import __version__
@@ -59,7 +60,7 @@ class EDTFTypeError(TypeError):
 def parse_edtf_level0(edtfstr):
     """Parse EDTF input string."""
     try:
-        return parse_edtf(edtfstr)
+        return edtf_parse_edtf(edtfstr)
     except ParseException:
         raise EDTFValueError(
             "The string is not a valid EDTF-formatted string.")
@@ -169,3 +170,18 @@ def _format_edtf0_interval_naive(edtf_interval, format, locale):
 
     return format_interval(
         dt_start, dt_end, skeleton, fuzzy=True, locale=locale)
+
+def parse_edtf(date):
+    """parse_edtf after trying isoparse for simple date formats.
+
+    parse_edtf/pyparsing don't work in a thread safe way and throw
+    TypeError randomly on some runs. This function tries to get isoparse first
+    and then falls back to parse_edtf
+    """
+    if len(date) == 10:
+        try:
+            isodate = isoparse(date)
+            return Date(isodate.year, isodate.month, isodate.day)
+        except Exception:
+            pass
+    return edtf_parse_edtf(date)
