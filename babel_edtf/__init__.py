@@ -181,7 +181,7 @@ def parse_edtf(date):
     if len(date) == 10:
         try:
             isodate = isoparse(date)
-            return Date(isodate.year, isodate.month, isodate.day)
+            return Date(str(isodate.year), str(isodate.month), str(isodate.day))
         except Exception:
             pass
     return edtf_parse_edtf(date)
