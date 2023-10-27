@@ -60,7 +60,7 @@ class EDTFTypeError(TypeError):
 def parse_edtf_level0(edtfstr):
     """Parse EDTF input string."""
     try:
-        return edtf_parse_edtf(edtfstr)
+        return parse_edtf(edtfstr)
     except ParseException:
         raise EDTFValueError(
             "The string is not a valid EDTF-formatted string.")
