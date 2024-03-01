@@ -20,8 +20,8 @@ tests_require = [
     'pytest-cov>=2.10.1',
     'pytest-isort>=1.2.0',
     'pytest-pycodestyle>=2.2.0',
-    'pytest-pydocstyle>=2.2.0',
-    'pytest>=6,<7',
+    'pytest-pydocstyle>=2.3.2',
+    'pytest>=7,<8',
 ]
 
 extras_require = {
