@@ -36,11 +36,11 @@ for reqs in extras_require.values():
     extras_require['all'].extend(reqs)
 
 setup_requires = [
-    'Babel>=2.8',
+    'Babel>=2.12',
 ]
 
 install_requires = [
-    'Babel>=2.8',
+    'Babel>=2.12',
     'edtf>=4.0.1',
 ]
 

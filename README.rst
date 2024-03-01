@@ -37,7 +37,7 @@ Let's format some EDTF strings:
 'jan.–sep. 2020'
 
 >>> format_edtf('2020-01/2020-09', format='long', locale='en')
-'January – September 2020'
+'January\u2009–\u2009September 2020'
 
 The following formats are supported:
 
