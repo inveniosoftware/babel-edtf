@@ -13,7 +13,9 @@ from babel import Locale
 from babel.dates import LC_TIME, format_date, format_interval, format_skeleton
 from dateutil.parser import isoparse
 from edtf import PRECISION_DAY, PRECISION_MONTH, PRECISION_YEAR, Date, \
-    EDTFObject, Interval, struct_time_to_datetime, parse_edtf as edtf_parse_edtf
+    EDTFObject, Interval
+from edtf import parse_edtf as edtf_parse_edtf
+from edtf import struct_time_to_datetime
 from edtf.parser.grammar import ParseException
 
 from .version import __version__
@@ -171,6 +173,7 @@ def _format_edtf0_interval_naive(edtf_interval, format, locale):
     return format_interval(
         dt_start, dt_end, skeleton, fuzzy=True, locale=locale)
 
+
 def parse_edtf(date):
     """parse_edtf after trying isoparse for simple date formats.
 
@@ -181,7 +184,11 @@ def parse_edtf(date):
     if len(date) == 10:
         try:
             isodate = isoparse(date)
-            return Date(str(isodate.year), str(isodate.month).zfill(2), str(isodate.day).zfill(2))
+            return Date(
+                str(isodate.year),
+                str(isodate.month).zfill(2),
+                str(isodate.day).zfill(2),
+            )
         except Exception:
             pass
     return edtf_parse_edtf(date)
