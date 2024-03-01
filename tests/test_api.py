@@ -13,6 +13,8 @@ import pytest
 
 from babel_edtf import edtf_to_datetime, format_edtf, parse_edtf_level0
 
+separator = '\u2009–\u2009'
+
 
 @pytest.mark.parametrize('edtfstr,locale,format,expected', [
     # ## Dates
@@ -48,38 +50,53 @@ from babel_edtf import edtf_to_datetime, format_edtf, parse_edtf_level0
     ('2020-09-30', 'da', 'full', 'onsdag den 30. september 2020'),
     # ### Intervals (same precision)
     # Year (en)
-    ('2020/2021', 'en', 'short', '2020 – 2021'),
-    ('2020/2021', 'en', 'medium', '2020 – 2021'),
-    ('2020/2021', 'en', 'long', '2020 – 2021'),
-    ('2020/2021', 'en', 'full', '2020 – 2021'),
+    ('2020/2021', 'en', 'short', f'2020{separator}2021'),
+    ('2020/2021', 'en', 'medium', f'2020{separator}2021'),
+    ('2020/2021', 'en', 'long', f'2020{separator}2021'),
+    ('2020/2021', 'en', 'full', f'2020{separator}2021'),
     # Year (da)
     ('2020/2021', 'da', 'short', '2020–2021'),
     ('2020/2021', 'da', 'medium', '2020–2021'),
     ('2020/2021', 'da', 'long', '2020–2021'),
     ('2020/2021', 'da', 'full', '2020–2021'),
     # Year-Month (constant year) (en)
-    ('2020-09/2020-11', 'en', 'short', '9/2020 – 11/2020'),
-    ('2020-09/2020-11', 'en', 'medium', 'Sep – Nov 2020'),
-    ('2020-09/2020-11', 'en', 'long', 'September – November 2020'),
-    ('2020-09/2020-11', 'en', 'full', 'September – November 2020'),
+    ('2020-09/2020-11', 'en', 'short', f'9/2020{separator}11/2020'),
+    ('2020-09/2020-11', 'en', 'medium', f'Sep{separator}Nov 2020'),
+    ('2020-09/2020-11', 'en', 'long', f'September{separator}November 2020'),
+    ('2020-09/2020-11', 'en', 'full', f'September{separator}November 2020'),
     # Year-Month (different year) (en)
-    ('2020-09/2021-11', 'en', 'short', '9/2020 – 11/2021'),
-    ('2020-09/2021-11', 'en', 'medium', 'Sep 2020 – Nov 2021'),
-    ('2020-09/2021-11', 'en', 'long', 'September 2020 – November 2021'),
-    ('2020-09/2021-11', 'en', 'full', 'September 2020 – November 2021'),
+    ('2020-09/2021-11', 'en', 'short', f'9/2020{separator}11/2021'),
+    ('2020-09/2021-11', 'en', 'medium', f'Sep 2020{separator}Nov 2021'),
+    (
+        '2020-09/2021-11',
+        'en',
+        'long',
+        f'September 2020{separator}November 2021'
+    ),
+    (
+        '2020-09/2021-11',
+        'en',
+        'full',
+        f'September 2020{separator}November 2021'
+    ),
     # Year-Month (reverse chronological order) (da)
     ('2021-11/2020-09', 'da', 'full', 'november 2021–september 2020'),
     # Year-Month-Day (en)
-    ('2020-09-01/2020-11-15', 'en', 'short', '9/1/2020 – 11/15/2020'),
-    ('2020-09-01/2020-11-15', 'en', 'medium', 'Sep 1 – Nov 15, 2020'),
+    ('2020-09-01/2020-11-15', 'en', 'short', f'9/1/2020{separator}11/15/2020'),
+    ('2020-09-01/2020-11-15', 'en', 'medium', f'Sep 1{separator}Nov 15, 2020'),
     # Note the next two lines. For date intervals we are forced to use
     # format_skeleton, and thus these lines differ in format from other
     # long/full formats.
-    ('2020-09-01/2020-11-15', 'en', 'long', 'Sep 1 – Nov 15, 2020'),
-    ('2020-09-01/2020-11-15', 'en', 'full', 'Tue, Sep 1 – Sun, Nov 15, 2020'),
+    ('2020-09-01/2020-11-15', 'en', 'long', f'Sep 1{separator}Nov 15, 2020'),
+    (
+        '2020-09-01/2020-11-15',
+        'en',
+        'full',
+        f'Tue, Sep 1{separator}Sun, Nov 15, 2020'
+    ),
     # ### Intervals (different precision)
-    ('2020-09-02/2020-11', 'en', 'long', 'Sep 2 – Nov 30, 2020'),
-    ('2020-09/2020-11-15', 'en', 'long', 'Sep 1 – Nov 15, 2020'),
+    ('2020-09-02/2020-11', 'en', 'long', f'Sep 2{separator}Nov 30, 2020'),
+    ('2020-09/2020-11-15', 'en', 'long', f'Sep 1{separator}Nov 15, 2020'),
 ])
 def test_format_edtf(edtfstr, locale, format, expected):
     assert format_edtf(edtfstr, format=format, locale=locale) == expected
@@ -120,4 +137,4 @@ def test_format_edtf_format():
     """Test overriding the format."""
     assert format_edtf('2020-11', format='yMd', locale='en') == '11/1/2020'
     assert format_edtf('2020/2021', format='yM', locale='en') == \
-        '1/2020 – 12/2021'
+        f'1/2020{separator}12/2021'
