@@ -10,8 +10,11 @@
 from datetime import datetime
 
 import pytest
+from edtf import Date, Interval
+from edtf.parser.edtf_exceptions import EDTFParseException
 
-from babel_edtf import edtf_to_datetime, format_edtf, parse_edtf_level0
+from babel_edtf import edtf_to_datetime, format_edtf, parse_edtf, \
+    parse_edtf_level0
 
 separator = '\u2009–\u2009'
 
@@ -102,7 +105,7 @@ def test_format_edtf(edtfstr, locale, format, expected):
     assert format_edtf(edtfstr, format=format, locale=locale) == expected
 
 
-def test_invalid():
+def test_format_edtf_invalid():
     """Test invalid values to format_edtf."""
     pytest.raises(ValueError, format_edtf, 'invalid')
     pytest.raises(ValueError, format_edtf, '2021/')
@@ -138,3 +141,53 @@ def test_format_edtf_format():
     assert format_edtf('2020-11', format='yMd', locale='en') == '11/1/2020'
     assert format_edtf('2020/2021', format='yM', locale='en') == \
         f'1/2020{separator}12/2021'
+
+
+@pytest.mark.parametrize('edtfstr,expected', [
+    # Year in range
+    ('2020', Date('2020')),
+    ('2020/2021', Interval(Date('2020'), Date('2021'))),
+    # Month in range
+    ('2020-12', Date('2020', '12')),
+    ('2020-09/2020-12', Interval(Date('2020', '09'), Date('2020', '12'))),
+    # Day in range
+    ('2020-12-31', Date('2020', '12', '31')),
+    (
+        '2020-09-01/2020-12-31',
+        Interval(Date('2020', '09', '01'), Date('2020', '12', '31'))
+    ),
+    # Day in range for month of February on leap year
+    ('2020-02-29', Date('2020', '02', '29')),
+    (
+        '2020-02-29/2020-12-31',
+        Interval(Date('2020', '02', '29'), Date('2020', '12', '31'))
+    ),
+])
+def test_parse_edtf(edtfstr, expected):
+    """Test valid values to parse_edtf."""
+    parse_edtf(edtfstr) == expected
+
+
+@pytest.mark.parametrize('edtfstr', [
+    # Month out of range
+    ('2020-13'),
+    ('2020-13/2021-11'),
+    ('2020-09/2021-13'),
+    ('2020-13-01'),
+    ('2020-09-01/2020-13-01'),
+    ('2020-13-01/2020-09-01'),
+    # Day out of range for month
+    ('2020-04-31'),
+    ('2020-04-31/2020-11-15'),
+    ('2020-09-01/2020-04-31'),
+    ('2020-02-30'),
+    ('2020-02-30/2020-11-15'),
+    ('2020-09-01/2020-02-30'),
+    # Day out of range for month of February on non-leap year
+    ('2021-02-29'),
+    ('2021-02-29/2020-11-15'),
+    ('2020-09-01/2021-02-29'),
+])
+def test_parse_edtf_invalid(edtfstr):
+    """Test invalid values to parse_edtf."""
+    pytest.raises(EDTFParseException, parse_edtf, edtfstr)
