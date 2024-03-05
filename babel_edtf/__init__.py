@@ -7,6 +7,7 @@
 
 """Localization of Extended Date Time Format (EDTF) level 0 strings."""
 
+import calendar
 from datetime import date as date_
 
 from babel import Locale
@@ -16,7 +17,7 @@ from edtf import PRECISION_DAY, PRECISION_MONTH, PRECISION_YEAR, Date, \
     EDTFObject, Interval
 from edtf import parse_edtf as edtf_parse_edtf
 from edtf import struct_time_to_datetime
-from edtf.parser.grammar import ParseException
+from edtf.parser.grammar import EDTFParseException, ParseException
 
 from .version import __version__
 
@@ -174,6 +175,23 @@ def _format_edtf0_interval_naive(edtf_interval, format, locale):
         dt_start, dt_end, skeleton, fuzzy=True, locale=locale)
 
 
+def _validate_leap_year(edtf_date):
+    """Validate that dates on the 29th of February are on leap years."""
+    if isinstance(edtf_date, Date):
+        if (
+            edtf_date.precision == PRECISION_DAY
+            and edtf_date.day == '29'
+            and edtf_date.month == '02'
+            and not calendar.isleap(int(edtf_date.year))
+        ):
+            raise EDTFParseException(
+                'Day is out of range for month of February on non-leap year.'
+            )
+    elif isinstance(edtf_date, Interval):
+        _validate_leap_year(edtf_date.lower)
+        _validate_leap_year(edtf_date.upper)
+
+
 def parse_edtf(date):
     """parse_edtf after trying isoparse for simple date formats.
 
@@ -191,4 +209,12 @@ def parse_edtf(date):
             )
         except Exception:
             pass
-    return edtf_parse_edtf(date)
+
+    edtf_date = edtf_parse_edtf(date)
+
+    # python-edtf's edtf_parse_edtf uses a grammar that allows days up to 29
+    # for the month of February regardless of whether the year is a leap year
+    # or not. Here we fail in case we hit this corner case.
+    _validate_leap_year(edtf_date)
+
+    return edtf_date
