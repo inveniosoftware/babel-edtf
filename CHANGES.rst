@@ -9,7 +9,7 @@ Changes
 
 Version 1.1.4 (released 2024-03-05)
 
-- fix: fail parsing 29th of February on leap years
+- fix: fail parsing 29th of February on non-leap years
 
 Version 1.1.3 (released 2023-11-01)
 
