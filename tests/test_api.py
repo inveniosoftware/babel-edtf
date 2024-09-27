@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2024 CERN.
 #
 # Babel-EDTF is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
@@ -165,7 +165,7 @@ def test_format_edtf_format():
 ])
 def test_parse_edtf(edtfstr, expected):
     """Test valid values to parse_edtf."""
-    parse_edtf(edtfstr) == expected
+    assert parse_edtf(edtfstr) == expected
 
 
 @pytest.mark.parametrize('edtfstr', [
