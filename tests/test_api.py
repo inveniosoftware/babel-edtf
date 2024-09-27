@@ -108,7 +108,13 @@ def test_format_edtf(edtfstr, locale, format, expected):
 def test_format_edtf_invalid():
     """Test invalid values to format_edtf."""
     pytest.raises(ValueError, format_edtf, 'invalid')
-    pytest.raises(ValueError, format_edtf, '2021/')
+
+    # With version 5.0.0, this is parsed as an interval,
+    # but `interval.lower` is of type `UncertainOrApproximate`,
+    # so the precision cannot be determined for formatting,
+    # hence the `AttributeError`.
+    pytest.raises(AttributeError, format_edtf, '2021/')
+
     pytest.raises(ValueError, format_edtf, '2020?')
     pytest.raises(TypeError, format_edtf, 2020)
 

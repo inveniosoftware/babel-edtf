@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2024 CERN.
 #
 # Babel-EDTF is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
@@ -41,7 +41,7 @@ setup_requires = [
 
 install_requires = [
     'Babel>=2.12',
-    'edtf>=4.0.1',
+    'edtf>=5.0.0,<6.0.0',
 ]
 
 packages = find_packages()

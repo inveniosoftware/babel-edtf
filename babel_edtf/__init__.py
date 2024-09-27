@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 CERN.
+# Copyright (C) 2020-2024 CERN.
 #
 # Babel-EDTF is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
@@ -13,11 +13,12 @@ from datetime import date as date_
 from babel import Locale
 from babel.dates import LC_TIME, format_date, format_interval, format_skeleton
 from dateutil.parser import isoparse
-from edtf import PRECISION_DAY, PRECISION_MONTH, PRECISION_YEAR, Date, \
-    EDTFObject, Interval
+from edtf import Date, EDTFObject, Interval
 from edtf import parse_edtf as edtf_parse_edtf
 from edtf import struct_time_to_datetime
 from edtf.parser.grammar import EDTFParseException, ParseException
+from edtf.parser.parser_classes import PRECISION_DAY, PRECISION_MONTH, \
+    PRECISION_YEAR
 
 from .version import __version__
 
