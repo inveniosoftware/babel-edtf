@@ -10,7 +10,7 @@
 from datetime import datetime
 
 import pytest
-from edtf import Date, Interval
+from edtf import Date, DateAndTime, Interval
 from edtf.parser.edtf_exceptions import EDTFParseException
 
 from babel_edtf import edtf_to_datetime, format_edtf, parse_edtf, \
@@ -144,6 +144,7 @@ def test_format_edtf_format():
 
 
 @pytest.mark.parametrize('edtfstr,expected', [
+    # ## Dates
     # Year in range
     ('2020', Date('2020')),
     ('2020/2021', Interval(Date('2020'), Date('2021'))),
@@ -161,6 +162,27 @@ def test_format_edtf_format():
     (
         '2020-02-29/2020-12-31',
         Interval(Date('2020', '02', '29'), Date('2020', '12', '31'))
+    ),
+    # ## Dates and times
+    # Complete representations for calendar date and (local) time of day
+    (
+        '1985-04-12T23:20:30',
+        DateAndTime(Date('1985', '04', '12'), '23:20:30')
+    ),
+    # Complete representations for calendar date and UTC time of day
+    (
+        '1985-04-12T23:20:30Z',
+        DateAndTime(Date('1985', '04', '12'), '23:20:30Z')
+    ),
+    # Date and time with timeshift in hours (only)
+    (
+        '1985-04-12T23:20:30-04',
+        DateAndTime(Date('1985', '04', '12'), '23:20:30-04')
+    ),
+    # Date and time with timeshift in hours and minutes
+    (
+        '1985-04-12T23:20:30+04:30',
+        DateAndTime(Date('1985', '04', '12'), '23:20:30+04:30')
     ),
 ])
 def test_parse_edtf(edtfstr, expected):
