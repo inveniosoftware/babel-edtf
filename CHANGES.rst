@@ -7,7 +7,7 @@
 Changes
 =======
 
-Version v1.2.1 (released 2024-11-07)
+Version 1.2.1 (released 2024-11-07)
 
 - fix: consider DD_MM_YYYY invalid
 
