@@ -215,6 +215,12 @@ def test_parse_edtf(edtfstr, expected):
     ('2021-02-29'),
     ('2021-02-29/2020-11-15'),
     ('2020-09-01/2021-02-29'),
+    # Badly formatted inputs
+    ('123456789'),
+    ('1234567890'),
+    ('12345678901'),
+    ('31-12-2020'),
+    ('31_12_2020'),
 ])
 def test_parse_edtf_invalid(edtfstr):
     """Test invalid values to parse_edtf."""

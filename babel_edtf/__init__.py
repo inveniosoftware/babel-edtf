@@ -8,6 +8,7 @@
 """Localization of Extended Date Time Format (EDTF) level 0 strings."""
 
 import calendar
+import re
 from datetime import date as date_
 
 from babel import Locale
@@ -25,6 +26,7 @@ from .version import __version__
 BOUND_LOWER = 'lower'
 BOUND_UPPER = 'upper'
 
+_isoparse_date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 DATE_SKELETON_FORMATS = {
     PRECISION_YEAR: {
@@ -194,13 +196,13 @@ def _validate_leap_year(edtf_date):
 
 
 def parse_edtf(date):
-    """parse_edtf after trying isoparse for simple date formats.
+    """parse_edtf after trying isoparse for the simple date format YYYY-MM-DD.
 
     parse_edtf/pyparsing don't work in a thread safe way and throw
     TypeError randomly on some runs. This function tries to get isoparse first
     and then falls back to parse_edtf
     """
-    if len(date) == 10:
+    if len(date) == 10 and _isoparse_date_pattern.match(date):
         try:
             isodate = isoparse(date)
             return Date(
