@@ -7,6 +7,10 @@
 Changes
 =======
 
+Version v1.2.1 (released 2024-11-07)
+
+- fix: consider DD_MM_YYYY invalid
+
 Version 1.2.0 (released 2024-10-28)
 
 - setup: upgrade edtf to 5.0.0 and fix bug with dates and times with hour 23
