@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2020-2024 CERN.
-#
-# Babel-EDTF is free software; you can redistribute it and/or modify it under
-# the terms of the MIT License; see LICENSE file for more details.
+# SPDX-FileCopyrightText: 2020-2024 CERN.
+# SPDX-License-Identifier: MIT
 
 """Localization of Extended Date Time Format (EDTF) level 0 strings."""
 
