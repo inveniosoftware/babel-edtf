@@ -14,28 +14,27 @@ from edtf import Date, EDTFObject, Interval
 from edtf import parse_edtf as edtf_parse_edtf
 from edtf import struct_time_to_datetime
 from edtf.parser.grammar import EDTFParseException, ParseException
-from edtf.parser.parser_classes import PRECISION_DAY, PRECISION_MONTH, \
-    PRECISION_YEAR
+from edtf.parser.parser_classes import PRECISION_DAY, PRECISION_MONTH, PRECISION_YEAR
 
 from .version import __version__
 
-BOUND_LOWER = 'lower'
-BOUND_UPPER = 'upper'
+BOUND_LOWER = "lower"
+BOUND_UPPER = "upper"
 
 _isoparse_date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 DATE_SKELETON_FORMATS = {
     PRECISION_YEAR: {
-        'full': 'y',
-        'long': 'y',
-        'medium': 'y',
-        'short': 'y',
+        "full": "y",
+        "long": "y",
+        "medium": "y",
+        "short": "y",
     },
     PRECISION_MONTH: {
-        'full': 'yMMMM',
-        'long': 'yMMMM',
-        'medium': 'yMMM',
-        'short': 'yM',
+        "full": "yMMMM",
+        "long": "yMMMM",
+        "medium": "yMMM",
+        "short": "yM",
     },
     # Day precision is only used for intervals (not for date or date and time)
     # formatting. This is because the format_skeleton does not format exactly
@@ -43,10 +42,10 @@ DATE_SKELETON_FORMATS = {
     # dates look the same independently if they where formatted with
     # format_edtf or format_date.
     PRECISION_DAY: {
-        'full': 'EEEEyMMMMd',
-        'long': 'yMMMMd',
-        'medium': 'yMMMd',
-        'short': 'yMd',
+        "full": "EEEEyMMMMd",
+        "long": "yMMMMd",
+        "medium": "yMMMd",
+        "short": "yMd",
     },
 }
 
@@ -64,11 +63,10 @@ def parse_edtf_level0(edtfstr):
     try:
         return parse_edtf(edtfstr)
     except ParseException:
-        raise EDTFValueError(
-            "The string is not a valid EDTF-formatted string.")
+        raise EDTFValueError("The string is not a valid EDTF-formatted string.")
 
 
-def get_edtf_date_skeleton(precision, format='medium'):
+def get_edtf_date_skeleton(precision, format="medium"):
     """Return the date skeleton for a given precision.
 
     :param precision: the precision to use, one of "year", "month" or "day"
@@ -98,7 +96,7 @@ def edtf_to_datetime(edtf_date, strict):
     return struct_time_to_datetime(date)
 
 
-def format_edtf(edtf_level0=None, format='medium', locale=LC_TIME):
+def format_edtf(edtf_level0=None, format="medium", locale=LC_TIME):
     """Format a EDTF level 0 expression.
 
     The formatting relies on Babel's ``format_skeleton()`` and
@@ -119,15 +117,13 @@ def format_edtf(edtf_level0=None, format='medium', locale=LC_TIME):
     # Do we have an EDTFObject (directly or parsed from a string)?
     if not isinstance(edtf_level0, EDTFObject):
         raise EDTFTypeError(
-            'You must provide either a EDTF formatted string or an EDTF '
-            'object.')
+            "You must provide either a EDTF formatted string or an EDTF " "object."
+        )
 
     # Do we have a Date, Interval or DateAndTime?
-    if not (isinstance(edtf_level0, Date)
-            or isinstance(edtf_level0, Interval)):
+    if not (isinstance(edtf_level0, Date) or isinstance(edtf_level0, Interval)):
         raise EDTFValueError(
-            'Only an EDTF level 0 date, date and time or interval is '
-            'supported.'
+            "Only an EDTF level 0 date, date and time or interval is " "supported."
         )
 
     locale = Locale.parse(locale)
@@ -148,13 +144,12 @@ def _format_edtf0_date(edtf_date, format, locale, strict):
         return format_date(dt.date(), format=format, locale=locale)
     else:
         # Year or month precision: Use skeleton formatting
-        if format in ('full', 'long', 'medium', 'short'):
+        if format in ("full", "long", "medium", "short"):
             skeleton = get_edtf_date_skeleton(edtf_date.precision, format)
         else:
             skeleton = format
 
-        return format_skeleton(
-            skeleton, datetime=dt, fuzzy=True, locale=locale)
+        return format_skeleton(skeleton, datetime=dt, fuzzy=True, locale=locale)
 
 
 def _format_edtf0_interval_naive(edtf_interval, format, locale):
@@ -165,13 +160,12 @@ def _format_edtf0_interval_naive(edtf_interval, format, locale):
     precision = get_interval_precision(edtf_interval)
 
     # Get skeleton format
-    if format in ('full', 'long', 'medium', 'short'):
+    if format in ("full", "long", "medium", "short"):
         skeleton = get_edtf_date_skeleton(precision, format)
     else:
         skeleton = format
 
-    return format_interval(
-        dt_start, dt_end, skeleton, fuzzy=True, locale=locale)
+    return format_interval(dt_start, dt_end, skeleton, fuzzy=True, locale=locale)
 
 
 def _validate_leap_year(edtf_date):
@@ -179,12 +173,12 @@ def _validate_leap_year(edtf_date):
     if isinstance(edtf_date, Date):
         if (
             edtf_date.precision == PRECISION_DAY
-            and edtf_date.day == '29'
-            and edtf_date.month == '02'
+            and edtf_date.day == "29"
+            and edtf_date.month == "02"
             and not calendar.isleap(int(edtf_date.year))
         ):
             raise EDTFParseException(
-                'Day is out of range for month of February on non-leap year.'
+                "Day is out of range for month of February on non-leap year."
             )
     elif isinstance(edtf_date, Interval):
         _validate_leap_year(edtf_date.lower)

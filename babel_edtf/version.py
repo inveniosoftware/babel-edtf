@@ -7,4 +7,4 @@ This file is imported by ``babel_edtf.__init__``,
 and parsed by ``setup.py``.
 """
 
-__version__ = '1.2.1'
+__version__ = "1.2.1"
